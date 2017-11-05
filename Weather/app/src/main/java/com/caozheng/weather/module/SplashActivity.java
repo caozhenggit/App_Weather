@@ -18,14 +18,16 @@ import com.caozheng.weather.widget.SplashView;
 
 public class SplashActivity extends AppCompatActivity{
 
-    private int durationTime = 6;
+    private static final int DURATION_TIME = 6;
+    private static final String IMAGE_URL = "http://ww2.sinaimg.cn/large/72f96cbagw1f5mxjtl6htj20g00sg0vn.jpg";
+    private static final String ACTION_URL = "https://github.com/caozhenggit/Weather";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        SplashView.showSplashView(this, durationTime, R.mipmap.ic_launcher, new SplashView.OnSplashViewActionListener() {
+        SplashView.showSplashView(this, DURATION_TIME, R.mipmap.ic_launcher, new SplashView.OnSplashViewActionListener() {
             @Override
             public void onSplashImageClick(String actionUrl) {
 
@@ -41,6 +43,6 @@ public class SplashActivity extends AppCompatActivity{
             }
         });
 
-        SplashView.updateSplashData(this, "http://ww2.sinaimg.cn/large/72f96cbagw1f5mxjtl6htj20g00sg0vn.jpg", "http://jkyeo.com");
+        SplashView.updateSplashData(this, IMAGE_URL, ACTION_URL);
     }
 }
