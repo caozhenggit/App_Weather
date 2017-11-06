@@ -327,7 +327,16 @@ public class SplashView extends FrameLayout {
     }
 
     public interface OnSplashViewActionListener {
+        /**
+         * 图片点击事件
+         * @param actionUrl 跳转地址
+         */
         void onSplashImageClick(String actionUrl);
+
+        /**
+         * 闪屏页消失
+         * @param initiativeDismiss 是否消失
+         */
         void onSplashViewDismiss(boolean initiativeDismiss);
     }
 
