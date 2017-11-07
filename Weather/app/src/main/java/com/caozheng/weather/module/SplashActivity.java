@@ -1,6 +1,6 @@
 package com.caozheng.weather.module;
 
-
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,10 +23,14 @@ public class SplashActivity extends AppCompatActivity {
     private static final String IMAGE_URL = "http://ww2.sinaimg.cn/large/72f96cbagw1f5mxjtl6htj20g00sg0vn.jpg";
     private static final String ACTION_URL = "https://github.com/caozhenggit/Weather";
 
+    private Context mContext;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        mContext = this;
 
         SplashView.showSplashView(this, DURATION_TIME, R.mipmap.ic_launcher, new SplashView.OnSplashViewActionListener() {
             @Override

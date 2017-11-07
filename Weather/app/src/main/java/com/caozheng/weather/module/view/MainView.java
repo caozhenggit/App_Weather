@@ -1,6 +1,5 @@
 package com.caozheng.weather.module.view;
 
-import com.caozheng.weather.bean.CityBean;
 import com.caozheng.xfastmvp.mvp.BaseView;
 
 /**
@@ -12,7 +11,7 @@ import com.caozheng.xfastmvp.mvp.BaseView;
 
 public interface MainView extends BaseView {
 
-    void getCityDone(CityBean cityBean);
+    void getLocalCityDone();
 
     void syncCityDone();
 }

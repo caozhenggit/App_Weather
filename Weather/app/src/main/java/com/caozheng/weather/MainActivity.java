@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.caozheng.weather.adapter.MyFragmentPagerAdapter;
 import com.caozheng.weather.bean.CityBean;
+import com.caozheng.weather.db.SaveCityModel;
 import com.caozheng.weather.module.fragment.WeatherFragment;
 import com.caozheng.weather.module.presenter.MainPresenter;
 import com.caozheng.weather.module.view.MainView;
@@ -21,6 +22,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * @author caozheng
@@ -37,7 +41,8 @@ public class MainActivity extends AppActivity<MainPresenter> implements MainView
     private Context mContext;
     private ImageView[] points;
 
-    private List<Fragment> pagerList = new ArrayList<Fragment>();
+    private List<WeatherFragment> pagerList = new ArrayList<WeatherFragment>();
+    private RealmResults<SaveCityModel> mSaveCityList;
 
     @Override
     public void initParams(Bundle parms) {
@@ -57,7 +62,8 @@ public class MainActivity extends AppActivity<MainPresenter> implements MainView
     @Override
     public void doBusiness(Context mContext) {
         mPresenter.syncCity();
-        showLoading();
+
+        mPresenter.getLocalCity();
     }
 
     @Override
@@ -66,15 +72,12 @@ public class MainActivity extends AppActivity<MainPresenter> implements MainView
     }
 
     @Override
-    public void getCityDone(CityBean cityBean) {
-        hideLoading();
-
-        mPresenter.getWeather();
+    public void getLocalCityDone() {
+        initPager();
     }
 
     @Override
     public void syncCityDone() {
-        hideLoading();
     }
 
     @OnClick({R.id.imv_setting})
@@ -89,28 +92,26 @@ public class MainActivity extends AppActivity<MainPresenter> implements MainView
         }
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus){
-            initPager();
-        }
-    }
-
     private void initPager(){
-        pagerList.clear();
-        pagerList.add(new WeatherFragment());
-        pagerList.add(new WeatherFragment());
-        pagerList.add(new WeatherFragment());
-        pagerList.add(new WeatherFragment());
-        pagerList.add(new WeatherFragment());
+        Realm mRealm = App.getRealm();
+        mSaveCityList = mRealm.where(SaveCityModel.class)
+                .findAllSorted("type", Sort.DESCENDING);
 
-        addPoint(pagerList.size());
+        pagerList.clear();
+
+        for(int i = 0; i < mSaveCityList.size(); i++){
+            pagerList.add(new WeatherFragment());
+        }
+
+        addPoint(mSaveCityList.size());
 
         FragmentManager mFragmentManager = getSupportFragmentManager();
         mViewpager.setAdapter(new MyFragmentPagerAdapter(mFragmentManager, pagerList));
 
         viewPagerPageChangeListener();
+
+        setPoint(0);
+        pagerList.get(0).setCity(mSaveCityList.get(0));
     }
 
     private void viewPagerPageChangeListener(){
@@ -123,6 +124,8 @@ public class MainActivity extends AppActivity<MainPresenter> implements MainView
             @Override
             public void onPageSelected(int position) {
                 setPoint(position);
+
+                pagerList.get(position).setCity(mSaveCityList.get(position));
             }
 
             @Override
@@ -152,6 +155,19 @@ public class MainActivity extends AppActivity<MainPresenter> implements MainView
             } else {
                 points[i].setImageResource(R.mipmap.point_normal);
             }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Realm mRealm = App.getRealm();
+        if (mRealm != null) {
+            if(!mRealm.isClosed()) {
+                mRealm.close();
+            }
+
+            mRealm = null;
         }
     }
 }

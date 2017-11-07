@@ -1,5 +1,6 @@
 package com.caozheng.weather.module.view;
 
+import com.caozheng.weather.bean.WeatherBean;
 import com.caozheng.xfastmvp.mvp.BaseView;
 
 /**
@@ -9,5 +10,7 @@ import com.caozheng.xfastmvp.mvp.BaseView;
  */
 
 public interface WeatherView extends BaseView {
+
+    void getWeatherDone(WeatherBean weatherBean);
 
 }

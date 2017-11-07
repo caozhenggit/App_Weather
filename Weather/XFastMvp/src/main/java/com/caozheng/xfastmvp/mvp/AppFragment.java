@@ -10,12 +10,12 @@ import android.view.View;
  * describe:
  */
 public abstract class AppFragment<P extends BasePresenter> extends BaseFragment {
-    protected P mvpPresenter;
+    protected P mPresenter;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mvpPresenter = createPresenter();
+        mPresenter = createPresenter();
     }
 
     protected abstract P createPresenter();
@@ -23,8 +23,8 @@ public abstract class AppFragment<P extends BasePresenter> extends BaseFragment 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mvpPresenter != null) {
-            mvpPresenter.detachView();
+        if (mPresenter != null) {
+            mPresenter.detachView();
         }
     }
 }

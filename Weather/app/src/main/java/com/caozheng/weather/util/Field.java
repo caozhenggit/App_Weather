@@ -11,4 +11,6 @@ public class Field {
     public static final String FIELD_AUTHORIZATION = "Authorization";
     public static final String FIELD_APPCODE = "APPCODE";
     public static final String FIELD_CITY = "city";
+    public static final String FIELD_CITY_CODE = "citycode";
+    public static final String FIELD_IP = "ip";
 }

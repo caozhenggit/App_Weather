@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.caozheng.weather.module.fragment.WeatherFragment;
+
 import java.util.List;
 
 /**
@@ -15,9 +17,9 @@ import java.util.List;
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private FragmentManager mFragmentManager;
-    private List<Fragment> listFragment;
+    private List<WeatherFragment> listFragment;
 
-    public MyFragmentPagerAdapter(FragmentManager mFragmentManager, List<Fragment> list) {
+    public MyFragmentPagerAdapter(FragmentManager mFragmentManager, List<WeatherFragment> list) {
         super(mFragmentManager);
         this.mFragmentManager = mFragmentManager;
         this.listFragment = list;

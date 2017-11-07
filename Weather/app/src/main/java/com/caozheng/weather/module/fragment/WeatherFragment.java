@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.caozheng.weather.R;
+import com.caozheng.weather.bean.WeatherBean;
+import com.caozheng.weather.db.SaveCityModel;
 import com.caozheng.weather.module.presenter.WeatherPresenter;
 import com.caozheng.weather.module.view.WeatherView;
 import com.caozheng.xfastmvp.adapter.commonlistview.CommonAdapter;
@@ -57,6 +59,12 @@ public class WeatherFragment extends AppFragment<WeatherPresenter> implements We
         addDailyWeather();
     }
 
+    @Override
+    public void getWeatherDone(WeatherBean weatherBean) {
+        mTvTemperature.setText(weatherBean.getResult().getTemp() + "°");
+        mTvWeather.setText(weatherBean.getResult().getWeather());
+    }
+
     private void addDailyWeather() {
         for(int i = 0; i < 4; i++){
             LayoutInflater mInflater = LayoutInflater.from(getActivity());
@@ -65,5 +73,11 @@ public class WeatherFragment extends AppFragment<WeatherPresenter> implements We
 
             mLlFuture.addView(itemView);
         }
+    }
+
+    public void setCity(SaveCityModel model){
+        mPresenter.getWeather(model.getCityCode());
+
+        mTvCity.setText(model.getCity());
     }
 }
