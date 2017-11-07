@@ -13,4 +13,6 @@ import com.caozheng.xfastmvp.mvp.BaseView;
 public interface MainView extends BaseView {
 
     void getCityDone(CityBean cityBean);
+
+    void syncCityDone();
 }

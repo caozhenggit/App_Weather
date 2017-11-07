@@ -1,5 +1,6 @@
 package com.caozheng.weather.module;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,9 +17,9 @@ import com.caozheng.weather.widget.SplashView;
  * description: 闪屏页
  */
 
-public class SplashActivity extends AppCompatActivity{
+public class SplashActivity extends AppCompatActivity {
 
-    private static final int DURATION_TIME = 6;
+    private static final int DURATION_TIME = 3;
     private static final String IMAGE_URL = "http://ww2.sinaimg.cn/large/72f96cbagw1f5mxjtl6htj20g00sg0vn.jpg";
     private static final String ACTION_URL = "https://github.com/caozhenggit/Weather";
 

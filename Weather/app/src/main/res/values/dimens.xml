@@ -1,0 +1,6 @@
+<resources>
+
+    <!-- item daily weather -->
+    <dimen name="daily_weather_text_size">17sp</dimen>
+
+</resources>

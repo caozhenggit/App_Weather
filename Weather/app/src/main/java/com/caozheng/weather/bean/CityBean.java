@@ -1,5 +1,10 @@
 package com.caozheng.weather.bean;
 
+import java.util.List;
+
+import io.realm.RealmModel;
+import io.realm.annotations.RealmClass;
+
 /**
  * @author 10744
  * @date 2017/11/6
@@ -7,51 +12,86 @@ package com.caozheng.weather.bean;
  * describe:
  */
 
-public class CityBean {
+public class CityBean{
 
-    private String cityId;
-    private String cityName;
-    private String cityEnglishName;
-    private String country;
-    private String countryCode;
 
-    public String getCityId() {
-        return cityId;
+    /**
+     * status : 0
+     * msg : ok
+     * result : [{"cityid":"1","parentid":"0","citycode":"101010100","city":"北京"},{"cityid":"24","parentid":"0","citycode":"101020100","city":"上海"},{"cityid":"26","parentid":"0","citycode":"101030100","city":"天津"},{"cityid":"31","parentid":"0","citycode":"101040100","city":"重庆"},{"cityid":"32","parentid":"0","citycode":"101320101","city":"香港"}]
+     */
+
+    private int status;
+    private String msg;
+    private List<ResultBean> result;
+
+    public int getStatus() {
+        return status;
     }
 
-    public void setCityId(String cityId) {
-        this.cityId = cityId;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public String getCityName() {
-        return cityName;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public String getCityEnglishName() {
-        return cityEnglishName;
+    public List<ResultBean> getResult() {
+        return result;
     }
 
-    public void setCityEnglishName(String cityEnglishName) {
-        this.cityEnglishName = cityEnglishName;
+    public void setResult(List<ResultBean> result) {
+        this.result = result;
     }
 
-    public String getCountry() {
-        return country;
-    }
+    public static class ResultBean {
+        /**
+         * cityid : 1
+         * parentid : 0
+         * citycode : 101010100
+         * city : 北京
+         */
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+        private String cityid;
+        private String parentid;
+        private String citycode;
+        private String city;
 
-    public String getCountryCode() {
-        return countryCode;
-    }
+        public String getCityid() {
+            return cityid;
+        }
 
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
+        public void setCityid(String cityid) {
+            this.cityid = cityid;
+        }
+
+        public String getParentid() {
+            return parentid;
+        }
+
+        public void setParentid(String parentid) {
+            this.parentid = parentid;
+        }
+
+        public String getCitycode() {
+            return citycode;
+        }
+
+        public void setCitycode(String citycode) {
+            this.citycode = citycode;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
     }
 }

@@ -12,6 +12,8 @@ import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
 
 import com.caozheng.xfastmvp.XFastConf;
+
+import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
@@ -33,8 +35,11 @@ public abstract class BaseFragment extends Fragment {
         mActivity = getActivity();
 
         mContextView = inflater.inflate(bindLayout(), container, false);
+        ButterKnife.bind(this, mContextView);
+
         initView(mContextView);
         doBusiness(getActivity());
+
         return mContextView;
     }
 

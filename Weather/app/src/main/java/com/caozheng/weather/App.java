@@ -6,9 +6,13 @@ import android.content.Context;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
+import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import okhttp3.OkHttpClient;
 
 /**
@@ -21,6 +25,10 @@ import okhttp3.OkHttpClient;
 public class App extends Application {
 
     private static Context mContext;
+    private static Realm mRealm;
+
+    /** 是否打印Log */
+    private static final boolean LOG_DEBUG = true;
 
     /** 全局的连接超时时间 */
     private static final int CONNECT_TIMEOUT_TIME = 60000;
@@ -31,6 +39,11 @@ public class App extends Application {
     /** 重连次数 */
     private static final int RETRY_COUNT = 3;
 
+    /** Realm 数据库名称*/
+    private static final String DB_NAME = "weather.realm";
+    /** Realm 数据库版本号*/
+    private static final int VERSION_CODE = 0;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -38,22 +51,48 @@ public class App extends Application {
         mContext = this;
 
         initOkGo();
+
+        initRealm();
     }
 
     public static Context getAppContext(){
         return mContext;
     }
 
+    public static Realm getRealm(){
+        return mRealm;
+    }
+
     private void initOkGo(){
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
         builder.readTimeout(READ_TIMEOUT_TIME, TimeUnit.MILLISECONDS);
         builder.writeTimeout(WRITE_TIMEOUT_TIME, TimeUnit.MILLISECONDS);
         builder.connectTimeout(CONNECT_TIMEOUT_TIME, TimeUnit.MILLISECONDS);
+
+        if(LOG_DEBUG){
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor("OkGo");
+            //log打印级别，决定了log显示的详细程度
+            loggingInterceptor.setPrintLevel(HttpLoggingInterceptor.Level.BODY);
+            //log颜色级别，决定了log在控制台显示的颜色
+            loggingInterceptor.setColorLevel(Level.INFO);
+            builder.addInterceptor(loggingInterceptor);
+        }
 
         OkGo.getInstance().init(this)
                 .setOkHttpClient(builder.build())
                 .setCacheMode(CacheMode.NO_CACHE)
                 .setCacheTime(CacheEntity.CACHE_NEVER_EXPIRE)
                 .setRetryCount(RETRY_COUNT);
+    }
+
+    private void initRealm(){
+        Realm.init(this);
+
+        RealmConfiguration config = new RealmConfiguration.Builder()
+                .name(DB_NAME)
+                .schemaVersion(VERSION_CODE)
+                .build();
+        mRealm = Realm.getInstance(config);
     }
 }
