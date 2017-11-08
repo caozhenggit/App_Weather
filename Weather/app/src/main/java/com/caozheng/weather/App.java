@@ -81,7 +81,7 @@ public class App extends Application {
 
         OkGo.getInstance().init(this)
                 .setOkHttpClient(builder.build())
-                .setCacheMode(CacheMode.NO_CACHE)
+                .setCacheMode(CacheMode.FIRST_CACHE_THEN_REQUEST)
                 .setCacheTime(CacheEntity.CACHE_NEVER_EXPIRE)
                 .setRetryCount(RETRY_COUNT);
     }

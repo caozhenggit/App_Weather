@@ -720,7 +720,7 @@ public class WeatherBean {
 
                 private String weather;
                 private String temphigh;
-                private String img;
+                private int img;
                 private String winddirect;
                 private String windpower;
 
@@ -740,11 +740,11 @@ public class WeatherBean {
                     this.temphigh = temphigh;
                 }
 
-                public String getImg() {
+                public int getImg() {
                     return img;
                 }
 
-                public void setImg(String img) {
+                public void setImg(int img) {
                     this.img = img;
                 }
 

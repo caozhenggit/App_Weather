@@ -14,6 +14,7 @@ import com.caozheng.weather.bean.WeatherBean;
 import com.caozheng.weather.db.SaveCityModel;
 import com.caozheng.weather.module.presenter.WeatherPresenter;
 import com.caozheng.weather.module.view.WeatherView;
+import com.caozheng.weather.util.WeatherCodeCheckTable;
 import com.caozheng.xfastmvp.adapter.commonlistview.CommonAdapter;
 import com.caozheng.xfastmvp.mvp.AppFragment;
 
@@ -78,6 +79,9 @@ public class WeatherFragment extends AppFragment<WeatherPresenter> implements We
             WeatherBean.ResultBean.DailyBean dailyBean = list.get(i);
             ((TextView)itemView.findViewById(R.id.tv_day)).setText(dailyBean.getWeek());
             ((TextView)itemView.findViewById(R.id.tv_weather_text)).setText(dailyBean.getDay().getWeather());
+
+            int icon = WeatherCodeCheckTable.getInstance().getWeatherIcon(dailyBean.getDay().getImg());
+            ((ImageView)itemView.findViewById(R.id.imv_weather_icon)).setImageResource(icon);
 
             //最底温度
             String tempLow = dailyBean.getNight().getTemplow();
