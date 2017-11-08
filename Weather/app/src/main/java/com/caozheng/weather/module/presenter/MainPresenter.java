@@ -60,6 +60,8 @@ public class MainPresenter extends BasePresenter<MainView> {
                         @Override
                         public void onError(Response<String> response) {
                             super.onError(response);
+
+                            mView.syncCityDone();
                         }
                     });
         }else {
@@ -83,6 +85,8 @@ public class MainPresenter extends BasePresenter<MainView> {
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+
+                        mView.getLocalCityDone();
                     }
                 });
     }
@@ -101,7 +105,9 @@ public class MainPresenter extends BasePresenter<MainView> {
                         Gson gson = new Gson();
                         WeatherBean weatherBean = gson.fromJson(response.body(), WeatherBean.class);
 
-                        insertLocalCityToDb(weatherBean.getResult());
+                        if(weatherBean.getStatus().equals("0")){
+                            insertLocalCityToDb(weatherBean.getResult());
+                        }
 
                         mView.getLocalCityDone();
                     }
@@ -109,6 +115,8 @@ public class MainPresenter extends BasePresenter<MainView> {
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+
+                        mView.getLocalCityDone();
                     }
                 });
     }

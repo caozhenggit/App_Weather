@@ -56,20 +56,34 @@ public class WeatherFragment extends AppFragment<WeatherPresenter> implements We
 
     @Override
     public void doBusiness(Context mContext) {
-        addDailyWeather();
+
     }
 
     @Override
     public void getWeatherDone(WeatherBean weatherBean) {
         mTvTemperature.setText(weatherBean.getResult().getTemp() + "°");
         mTvWeather.setText(weatherBean.getResult().getWeather());
+
+        addDailyWeather(weatherBean);
     }
 
-    private void addDailyWeather() {
+    private void addDailyWeather(WeatherBean weatherBean) {
+        List<WeatherBean.ResultBean.DailyBean> list = weatherBean.getResult().getDaily();
         for(int i = 0; i < 4; i++){
             LayoutInflater mInflater = LayoutInflater.from(getActivity());
             View itemView = mInflater.inflate(R.layout.item_daily_weather_view, null);
-            itemView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1));
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1);
+            itemView.setLayoutParams(layoutParams);
+
+            WeatherBean.ResultBean.DailyBean dailyBean = list.get(i);
+            ((TextView)itemView.findViewById(R.id.tv_day)).setText(dailyBean.getWeek());
+            ((TextView)itemView.findViewById(R.id.tv_weather_text)).setText(dailyBean.getDay().getWeather());
+
+            //最底温度
+            String tempLow = dailyBean.getNight().getTemplow();
+            //最高温度
+            String tempHigh = dailyBean.getDay().getTemphigh();
+            ((TextView)itemView.findViewById(R.id.tv_range)).setText(tempLow + "°" + "~" + tempHigh + "°");
 
             mLlFuture.addView(itemView);
         }
