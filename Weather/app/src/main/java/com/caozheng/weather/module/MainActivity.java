@@ -81,6 +81,7 @@ public class MainActivity extends AppActivity<MainPresenter> implements MainView
 
     @Override
     public void syncCityDone() {
+
     }
 
     @OnClick({R.id.imv_setting})

@@ -1,9 +1,12 @@
 package com.caozheng.weather.module.presenter;
 
+import android.content.Context;
+
 import com.caozheng.weather.bean.WeatherBean;
 import com.caozheng.weather.module.view.WeatherView;
 import com.caozheng.weather.util.Api;
 import com.caozheng.weather.util.Field;
+import com.caozheng.xfastmvp.cache.SharedPref;
 import com.caozheng.xfastmvp.mvp.BasePresenter;
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
@@ -25,7 +28,15 @@ public class WeatherPresenter extends BasePresenter<WeatherView> {
         attachView(view);
     }
 
-    public void getWeather(String cityCode){
+    public void getWeather(final Context context, final String cityCode){
+        String body = SharedPref.getInstance(context).getString(cityCode, "");
+        if(!body.equals("")){
+            Gson gson = new Gson();
+            WeatherBean weatherBean = gson.fromJson(body, WeatherBean.class);
+
+            mView.getWeatherDone(weatherBean);
+        }
+
         Map<String, String> querys = new HashMap<String, String>();
         querys.put(Field.FIELD_CITY_CODE, cityCode);
 
@@ -38,6 +49,10 @@ public class WeatherPresenter extends BasePresenter<WeatherView> {
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         WeatherBean weatherBean = gson.fromJson(response.body(), WeatherBean.class);
+
+                        if(weatherBean.getStatus() == 0){
+                            SharedPref.getInstance(context).putString(cityCode, response.body());
+                        }
 
                         mView.getWeatherDone(weatherBean);
                     }

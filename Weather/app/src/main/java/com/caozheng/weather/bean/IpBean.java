@@ -9,23 +9,38 @@ package com.caozheng.weather.bean;
 
 public class IpBean {
 
-    private String ip;
-    private String address;
 
-    public String getIp() {
-        return ip;
+    /**
+     * cip : 112.65.12.248
+     * cid : 310000
+     * cname : 上海市
+     */
+
+    private String cip;
+    private String cid;
+    private String cname;
+
+    public String getCip() {
+        return cip;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setCip(String cip) {
+        this.cip = cip;
     }
 
-    public String getAddress() {
-        return address;
+    public String getCid() {
+        return cid;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setCid(String cid) {
+        this.cid = cid;
     }
 
+    public String getCname() {
+        return cname;
+    }
+
+    public void setCname(String cname) {
+        this.cname = cname;
+    }
 }

@@ -1,5 +1,7 @@
 package com.caozheng.weather.module.presenter;
 
+import android.util.Log;
+
 import com.caozheng.weather.App;
 import com.caozheng.weather.bean.CityBean;
 import com.caozheng.weather.bean.IpBean;
@@ -9,11 +11,14 @@ import com.caozheng.weather.db.SaveCityModel;
 import com.caozheng.weather.module.view.MainView;
 import com.caozheng.weather.util.Api;
 import com.caozheng.weather.util.Field;
+import com.caozheng.xfastmvp.cache.SharedPref;
 import com.caozheng.xfastmvp.mvp.BasePresenter;
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -71,15 +76,18 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     /** 获取当前所在城市 */
     public void getLocalCity(){
-        String url = "http://ip.chinaz.com/getip.aspx";
+        String url = "http://pv.sohu.com/cityjson?ie=utf-8 ";
+
         OkGo.<String>get(url)
                 .tag(this)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        IpBean bean = new Gson().fromJson(response.body(), IpBean.class);
+                        String body = response.body();
+                        String data = body.substring(body.indexOf("{"), body.indexOf("}") + 1);
 
-                        getLocalCityName(bean);
+                        IpBean bean = new Gson().fromJson(data, IpBean.class);
+                        getLocalCityName(bean.getCname());
                     }
 
                     @Override
@@ -91,9 +99,9 @@ public class MainPresenter extends BasePresenter<MainView> {
                 });
     }
 
-    private void getLocalCityName(IpBean bean){
+    private void getLocalCityName(String cityName){
         Map<String, String> querys = new HashMap<String, String>();
-        querys.put(Field.FIELD_IP, bean.getIp());
+        querys.put(Field.FIELD_CITY, cityName);
 
         OkGo.<String>get(Api.WEATHER_API_QUERY)
                 .headers(Field.FIELD_AUTHORIZATION, Field.FIELD_APPCODE + " " + Api.APP_CODE)
@@ -105,8 +113,11 @@ public class MainPresenter extends BasePresenter<MainView> {
                         Gson gson = new Gson();
                         WeatherBean weatherBean = gson.fromJson(response.body(), WeatherBean.class);
 
-                        if(weatherBean.getStatus().equals("0")){
+                        if(weatherBean.getStatus() == 0){
                             insertLocalCityToDb(weatherBean.getResult());
+
+                            SharedPref.getInstance(App.getAppContext())
+                                    .putString(weatherBean.getResult().getCitycode(), response.body());
                         }
 
                         mView.getLocalCityDone();

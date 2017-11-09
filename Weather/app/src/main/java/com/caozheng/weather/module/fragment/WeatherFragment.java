@@ -94,7 +94,7 @@ public class WeatherFragment extends AppFragment<WeatherPresenter> implements We
     }
 
     public void setCity(SaveCityModel model){
-        mPresenter.getWeather(model.getCityCode());
+        mPresenter.getWeather(getActivity(), model.getCityCode());
 
         mTvCity.setText(model.getCity());
     }
