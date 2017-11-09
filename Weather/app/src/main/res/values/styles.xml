@@ -8,4 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <declare-styleable name="DailyWeatherView">
+        <attr name="day_text" format="string"/>
+        <attr name="weather_icon" format="reference|integer"/>
+        <attr name="weather_text" format="string"/>
+        <attr name="weather_range" format="string"/>
+    </declare-styleable>
+
 </resources>
