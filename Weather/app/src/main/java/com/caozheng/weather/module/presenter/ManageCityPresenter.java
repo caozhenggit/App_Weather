@@ -27,6 +27,14 @@ public class ManageCityPresenter extends BasePresenter<ManageCityView> {
 
         RealmResults<SaveCityModel> cityList = mRealm.where(SaveCityModel.class).findAll();
 
+        mView.selectAllSaveCityDone(cityList);
+    }
+
+    public void selectAllCity(){
+        Realm mRealm = App.getRealm();
+
+        RealmResults<CityModel> cityList = mRealm.where(CityModel.class).findAll();
+
         mView.selectAllCityDone(cityList);
     }
 

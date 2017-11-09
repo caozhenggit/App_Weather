@@ -1,7 +1,9 @@
 package com.caozheng.xfastmvp.kit;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -191,5 +193,29 @@ public class DateKit {
         calendar.set(Calendar.DAY_OF_MONTH, 1);
 
         return calendar.getTimeInMillis();
+    }
+
+    /**
+     * 将时间转换为时间戳
+     *
+     * @param s
+     * @return
+     */
+    public static long dateToStamp(String s) throws ParseException {
+        Date date = ymdhms.parse(s);
+        return date.getTime();
+    }
+
+    /**
+     * 将时间戳转换为时间
+     *
+     * @param mills
+     * @return
+     */
+    public static String stampToDate(long mills){
+        String res;
+        Date date = new Date(mills);
+        res = ymdhms.format(date);
+        return res;
     }
 }

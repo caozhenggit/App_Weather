@@ -2,19 +2,28 @@ package com.caozheng.weather.module;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.caozheng.weather.R;
+import com.caozheng.weather.db.CityModel;
 import com.caozheng.weather.db.SaveCityModel;
 import com.caozheng.weather.module.presenter.ManageCityPresenter;
 import com.caozheng.weather.module.view.ManageCityView;
 import com.caozheng.xfastmvp.adapter.commonlistview.CommonAdapter;
 import com.caozheng.xfastmvp.adapter.commonlistview.ViewHolder;
 import com.caozheng.xfastmvp.mvp.AppActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -37,8 +46,16 @@ public class ManageCityActivity extends AppActivity<ManageCityPresenter> impleme
     ImageView imvAdd;
     @BindView(R.id.lv_city)
     ListView lvCity;
+    @BindView(R.id.searchView)
+    SearchView searchView;
+    @BindView(R.id.lv_search)
+    ListView lvSearch;
+    @BindView(R.id.ll_search)
+    LinearLayout llSearch;
 
     private Context mContext;
+    private RealmResults<CityModel> mCityList;
+    private RealmResults<SaveCityModel> mSaveCityList;
 
     @Override
     public ManageCityPresenter createPresenter() {
@@ -57,18 +74,30 @@ public class ManageCityActivity extends AppActivity<ManageCityPresenter> impleme
 
     @Override
     public void initView(View view) {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchItem(newText);
+                return false;
+            }
+        });
     }
 
     @Override
     public void doBusiness(Context mContext) {
         this.mContext = mContext;
         mPresenter.selectAllSaveCity();
+        mPresenter.selectAllCity();
     }
 
     @Override
     public void addCityDone() {
-
+        mPresenter.selectAllSaveCity();
     }
 
     @Override
@@ -77,8 +106,9 @@ public class ManageCityActivity extends AppActivity<ManageCityPresenter> impleme
     }
 
     @Override
-    public void selectAllCityDone(RealmResults<SaveCityModel> cityList) {
-        CommonAdapter<SaveCityModel> adapter = new CommonAdapter<SaveCityModel>(mContext, R.layout.item_listview_city, cityList) {
+    public void selectAllSaveCityDone(RealmResults<SaveCityModel> saveCityList) {
+        mSaveCityList = saveCityList;
+        CommonAdapter<SaveCityModel> adapter = new CommonAdapter<SaveCityModel>(mContext, R.layout.item_listview_city, saveCityList) {
             @Override
             protected void convert(ViewHolder viewHolder, SaveCityModel item, int position) {
                 viewHolder.setText(R.id.tv_city_name, item.getCity());
@@ -86,6 +116,13 @@ public class ManageCityActivity extends AppActivity<ManageCityPresenter> impleme
         };
 
         lvCity.setAdapter(adapter);
+    }
+
+    @Override
+    public void selectAllCityDone(RealmResults<CityModel> cityList) {
+        mCityList = cityList;
+
+        searchItem("");
     }
 
     @OnClick({R.id.imv_back, R.id.tv_title, R.id.imv_add})
@@ -97,10 +134,76 @@ public class ManageCityActivity extends AppActivity<ManageCityPresenter> impleme
                 break;
 
             case R.id.imv_add:
+                llSearch.setVisibility(View.VISIBLE);
+                searchView.setQuery("", false);
                 break;
 
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            //当搜索框可见时
+            if(llSearch.getVisibility() == View.VISIBLE){
+                llSearch.setVisibility(View.GONE);
+
+                return true;
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void searchItem(String text){
+        final List<String> mSearchList = new ArrayList<String>();
+
+        if(text.equals("")){
+            for (CityModel cityModel : mCityList) {
+                mSearchList.add(cityModel.getCity());
+            }
+        }else {
+            for (CityModel cityModel : mCityList) {
+                int index = cityModel.getCity().indexOf(text);
+                if(index != -1){
+                    mSearchList.add(cityModel.getCity());
+                }
+            }
+        }
+
+        CommonAdapter<String> adapter = new CommonAdapter<String>(mContext, R.layout.item_listview_search, mSearchList) {
+            @Override
+            protected void convert(ViewHolder viewHolder, String item, int position) {
+                viewHolder.setText(R.id.tv_text, item);
+            }
+        };
+
+        lvSearch.setAdapter(adapter);
+
+        lvSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                llSearch.setVisibility(View.GONE);
+
+                String city = mSearchList.get(i);
+
+                boolean isExist = false;
+                for (SaveCityModel saveCityModel : mSaveCityList) {
+                    if(saveCityModel.getCity().equals(city)){
+                        isExist = true;
+                    }
+                }
+
+                if(!isExist){
+                    for (CityModel cityModel : mCityList) {
+                        if(cityModel.getCity().equals(city)){
+                            mPresenter.addCity(cityModel);
+                        }
+                    }
+                }
+            }
+        });
     }
 }

@@ -2,11 +2,13 @@ package com.caozheng.weather.module.presenter;
 
 import android.content.Context;
 
+import com.caozheng.weather.App;
 import com.caozheng.weather.bean.WeatherBean;
 import com.caozheng.weather.module.view.WeatherView;
 import com.caozheng.weather.util.Api;
 import com.caozheng.weather.util.Field;
 import com.caozheng.xfastmvp.cache.SharedPref;
+import com.caozheng.xfastmvp.kit.DateKit;
 import com.caozheng.xfastmvp.mvp.BasePresenter;
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
@@ -28,13 +30,26 @@ public class WeatherPresenter extends BasePresenter<WeatherView> {
         attachView(view);
     }
 
+    /**
+     * 获取天气
+     * @param context
+     * @param cityCode
+     */
     public void getWeather(final Context context, final String cityCode){
+        boolean isRegain = true;
         String body = SharedPref.getInstance(context).getString(cityCode, "");
         if(!body.equals("")){
             Gson gson = new Gson();
             WeatherBean weatherBean = gson.fromJson(body, WeatherBean.class);
 
+            isRegain = dataTimeOut(weatherBean.getResult().getUpdatetime()
+                    , DateKit.getYmdhms(System.currentTimeMillis()));
+
             mView.getWeatherDone(weatherBean);
+        }
+
+        if(!isRegain){
+            return;
         }
 
         Map<String, String> querys = new HashMap<String, String>();
@@ -62,5 +77,26 @@ public class WeatherPresenter extends BasePresenter<WeatherView> {
                         super.onError(response);
                     }
                 });
+    }
+
+    /**
+     * 判断数据是否过期
+     * @param timeA
+     * @param timeB
+     * @return
+     */
+    private boolean dataTimeOut(String timeA, String timeB){
+        try {
+            long millsA = DateKit.dateToStamp(timeA);
+            long millsB = DateKit.dateToStamp(timeB);
+
+            long diff = millsB - millsA;
+
+            return diff > App.WEATHER_CACHE_TIMEOUT_TIME;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return true;
     }
 }

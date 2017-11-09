@@ -9,6 +9,7 @@ package com.caozheng.weather.util;
 
 public class Api {
 
+    public static final String WEATHER_API_GET_IP = "http://pv.sohu.com/cityjson?ie=utf-8";
     public static final String WEATHER_API_QUERY = "http://jisutianqi.market.alicloudapi.com/weather/query";
     public static final String WEATHER_API_CITY = "http://jisutianqi.market.alicloudapi.com/weather/city";
 

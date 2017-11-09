@@ -1,7 +1,5 @@
 package com.caozheng.weather.module.presenter;
 
-import android.util.Log;
-
 import com.caozheng.weather.App;
 import com.caozheng.weather.bean.CityBean;
 import com.caozheng.weather.bean.IpBean;
@@ -17,8 +15,6 @@ import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
-
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -76,9 +72,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     /** 获取当前所在城市 */
     public void getLocalCity(){
-        String url = "http://pv.sohu.com/cityjson?ie=utf-8 ";
-
-        OkGo.<String>get(url)
+        OkGo.<String>get(Api.WEATHER_API_GET_IP)
                 .tag(this)
                 .execute(new StringCallback() {
                     @Override
@@ -87,7 +81,7 @@ public class MainPresenter extends BasePresenter<MainView> {
                         String data = body.substring(body.indexOf("{"), body.indexOf("}") + 1);
 
                         IpBean bean = new Gson().fromJson(data, IpBean.class);
-                        getLocalCityName(bean.getCname());
+                        getLocalCityName(bean);
                     }
 
                     @Override
@@ -99,9 +93,9 @@ public class MainPresenter extends BasePresenter<MainView> {
                 });
     }
 
-    private void getLocalCityName(String cityName){
+    private void getLocalCityName(IpBean bean){
         Map<String, String> querys = new HashMap<String, String>();
-        querys.put(Field.FIELD_CITY, cityName);
+        querys.put(Field.FIELD_IP, bean.getCip());
 
         OkGo.<String>get(Api.WEATHER_API_QUERY)
                 .headers(Field.FIELD_AUTHORIZATION, Field.FIELD_APPCODE + " " + Api.APP_CODE)

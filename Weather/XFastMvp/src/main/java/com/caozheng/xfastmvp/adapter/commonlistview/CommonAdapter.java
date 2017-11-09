@@ -31,13 +31,13 @@ public abstract class CommonAdapter<T> extends CommonMultiItemTypeAdapter<T> {
             }
 
             @Override
-            public void convert(ViewHolder holder, T t, int position)
-            {
+            public void convert(ViewHolder holder, T t, int position) {
                 CommonAdapter.this.convert(holder, t, position);
             }
         });
     }
 
+    @Override
     protected abstract void convert(ViewHolder viewHolder, T item, int position);
 
 }

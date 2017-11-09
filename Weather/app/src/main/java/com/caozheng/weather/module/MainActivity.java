@@ -114,8 +114,10 @@ public class MainActivity extends AppActivity<MainPresenter> implements MainView
 
         viewPagerPageChangeListener();
 
-        setPoint(0);
-        pagerList.get(0).setCity(mSaveCityList.get(0));
+        if(pagerList.size() != 0){
+            setPoint(0);
+            pagerList.get(0).setCity(mSaveCityList.get(0));
+        }
     }
 
     private void viewPagerPageChangeListener(){

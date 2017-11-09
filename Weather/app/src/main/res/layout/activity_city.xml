@@ -1,49 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/blue_btn_bg_color">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:src="@mipmap/back_icon"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/blue_btn_bg_color">
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/imv_back"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            android:text="管理城市"/>
+            <ImageView
+                android:id="@+id/imv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:src="@mipmap/back_icon"/>
 
-        <ImageView
-            android:id="@+id/imv_add"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:src="@mipmap/add_icon"/>
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/imv_back"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:text="管理城市"/>
 
-    <ListView
-        android:id="@+id/lv_city"
+            <ImageView
+                android:id="@+id/imv_add"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:src="@mipmap/add_icon"/>
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/lv_city"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ListView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_search"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@color/black_50"
+        android:orientation="vertical">
 
-    </ListView>
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:iconifiedByDefault="false"
+            android:queryHint="请输入搜索内容" />
 
-</LinearLayout>
+        <ListView
+            android:id="@+id/lv_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"/>
+    </LinearLayout>
+
+</FrameLayout>

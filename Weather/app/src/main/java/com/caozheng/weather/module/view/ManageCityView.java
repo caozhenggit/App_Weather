@@ -1,5 +1,6 @@
 package com.caozheng.weather.module.view;
 
+import com.caozheng.weather.db.CityModel;
 import com.caozheng.weather.db.SaveCityModel;
 import com.caozheng.xfastmvp.mvp.BaseView;
 
@@ -18,6 +19,8 @@ public interface ManageCityView extends BaseView {
 
     void deleteCityDone();
 
-    void selectAllCityDone(RealmResults<SaveCityModel> cityList);
+    void selectAllSaveCityDone(RealmResults<SaveCityModel> cityList);
+
+    void selectAllCityDone(RealmResults<CityModel> cityList);
 
 }
