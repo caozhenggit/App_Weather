@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.caozheng.weather.App;
 import com.caozheng.weather.bean.WeatherBean;
+import com.caozheng.weather.db.SaveCityModel;
 import com.caozheng.weather.module.view.WeatherView;
 import com.caozheng.weather.util.Api;
 import com.caozheng.weather.util.Field;
@@ -33,11 +34,15 @@ public class WeatherPresenter extends BasePresenter<WeatherView> {
     /**
      * 获取天气
      * @param context
-     * @param cityCode
+     * @param model
      */
-    public void getWeather(final Context context, final String cityCode){
+    public void getWeather(final Context context, SaveCityModel model){
         boolean isRegain = true;
-        String body = SharedPref.getInstance(context).getString(cityCode, "");
+
+        final String cityId = model.getCityId();
+        String cityName = model.getCity();
+
+        String body = SharedPref.getInstance(context).getString(cityId, "");
         if(!body.equals("")){
             Gson gson = new Gson();
             WeatherBean weatherBean = gson.fromJson(body, WeatherBean.class);
@@ -53,7 +58,8 @@ public class WeatherPresenter extends BasePresenter<WeatherView> {
         }
 
         Map<String, String> querys = new HashMap<String, String>();
-        querys.put(Field.FIELD_CITY_CODE, cityCode);
+        querys.put(Field.FIELD_CITY, cityName);
+        querys.put(Field.FIELD_CITY_ID, cityId);
 
         OkGo.<String>get(Api.WEATHER_API_QUERY)
                 .headers(Field.FIELD_AUTHORIZATION, Field.FIELD_APPCODE + " " + Api.APP_CODE)
@@ -66,7 +72,7 @@ public class WeatherPresenter extends BasePresenter<WeatherView> {
                         WeatherBean weatherBean = gson.fromJson(response.body(), WeatherBean.class);
 
                         if(weatherBean.getStatus() == 0){
-                            SharedPref.getInstance(context).putString(cityCode, response.body());
+                            SharedPref.getInstance(context).putString(cityId, response.body());
                         }
 
                         mView.getWeatherDone(weatherBean);

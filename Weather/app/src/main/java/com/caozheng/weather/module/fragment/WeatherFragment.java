@@ -26,8 +26,8 @@ import static android.R.id.list;
 
 /**
  * @author caozheng
- *         Created time on 2017/11/7
- *         description:
+ * Created time on 2017/11/7
+ * description:
  */
 public class WeatherFragment extends AppFragment<WeatherPresenter> implements WeatherView {
 
@@ -97,16 +97,8 @@ public class WeatherFragment extends AppFragment<WeatherPresenter> implements We
     }
 
     public void setCity(SaveCityModel model) {
-        mPresenter.getWeather(getActivity(), model.getCityCode());
+        mPresenter.getWeather(getActivity(), model);
 
         mTvCity.setText(model.getCity());
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        ButterKnife.bind(this, rootView);
-        return rootView;
     }
 }

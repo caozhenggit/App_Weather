@@ -48,15 +48,17 @@ public class ManageCityPresenter extends BasePresenter<ManageCityView> {
         saveCityModel.setCityId(model.getCityId());
         saveCityModel.setType(0);
         mRealm.commitTransaction();
+
+        mView.addCityDone();
     }
 
-    public void deleteCity(String cityCode){
+    public void deleteCity(String cityId){
         Realm mRealm = App.getRealm();
 
         final RealmResults<SaveCityModel> cityList = mRealm.where(SaveCityModel.class).findAll();
         for (int i = 0; i < cityList.size(); i++) {
             final int index = i;
-            if(cityList.get(i).getCityCode().equals(cityCode)){
+            if(cityList.get(i).getCityId().equals(cityId)){
                 mRealm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {

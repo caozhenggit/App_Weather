@@ -96,6 +96,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     private void getLocalCityName(IpBean bean){
         Map<String, String> querys = new HashMap<String, String>();
         querys.put(Field.FIELD_IP, bean.getCip());
+        querys.put(Field.FIELD_CITY, bean.getCname());
 
         OkGo.<String>get(Api.WEATHER_API_QUERY)
                 .headers(Field.FIELD_AUTHORIZATION, Field.FIELD_APPCODE + " " + Api.APP_CODE)
