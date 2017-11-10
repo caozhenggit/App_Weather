@@ -32,7 +32,7 @@ import io.realm.Sort;
 /**
  * @author caozheng
  * Created time on 2017/11/5
- * <p>
+ *
  * description:
  */
 public class MainActivity extends AppActivity<MainPresenter> implements MainView {

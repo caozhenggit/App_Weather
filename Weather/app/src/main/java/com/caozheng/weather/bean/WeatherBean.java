@@ -78,7 +78,7 @@ public class WeatherBean {
         private String temp;
         private String temphigh;
         private String templow;
-        private String img;
+        private int img;
         private String humidity;
         private String pressure;
         private String windspeed;
@@ -162,11 +162,11 @@ public class WeatherBean {
             this.templow = templow;
         }
 
-        public String getImg() {
+        public int getImg() {
             return img;
         }
 
-        public void setImg(String img) {
+        public void setImg(int img) {
             this.img = img;
         }
 

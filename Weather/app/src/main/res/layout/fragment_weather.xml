@@ -5,9 +5,10 @@
               android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/ll_background"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@mipmap/image_snow"
+        android:background="@mipmap/image_day_sunny"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:layout_weight="3">

@@ -1,10 +1,7 @@
 package com.caozheng.weather.module.fragment;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,16 +10,13 @@ import com.caozheng.weather.bean.WeatherBean;
 import com.caozheng.weather.db.SaveCityModel;
 import com.caozheng.weather.module.presenter.WeatherPresenter;
 import com.caozheng.weather.module.view.WeatherView;
-import com.caozheng.weather.util.WeatherCodeCheckTable;
+import com.caozheng.weather.util.WeatherCheckTable;
 import com.caozheng.weather.widget.DailyWeatherView;
 import com.caozheng.xfastmvp.mvp.AppFragment;
 
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-
-import static android.R.id.list;
 
 /**
  * @author caozheng
@@ -47,6 +41,10 @@ public class WeatherFragment extends AppFragment<WeatherPresenter> implements We
     DailyWeatherView mDailyWeather3;
     @BindView(R.id.daily_weather4)
     DailyWeatherView mDailyWeather4;
+    @BindView(R.id.ll_background)
+    LinearLayout mLlBackground;
+
+    private SaveCityModel mSaveCityModel;
 
     @Override
     protected WeatherPresenter createPresenter() {
@@ -73,6 +71,14 @@ public class WeatherFragment extends AppFragment<WeatherPresenter> implements We
         mTvTemperature.setText(weatherBean.getResult().getTemp() + "°");
         mTvWeather.setText(weatherBean.getResult().getWeather());
 
+        int image = WeatherCheckTable.getInstance().getWeatherImage(weatherBean.getResult().getImg());
+        mLlBackground.setBackgroundResource(image);
+
+        int textColor = WeatherCheckTable.getInstance().getTextColor();
+        mTvTemperature.setTextColor(getResources().getColor(textColor));
+        mTvWeather.setTextColor(getResources().getColor(textColor));
+        mTvCity.setTextColor(getResources().getColor(textColor));
+
         addDailyWeather(weatherBean);
     }
 
@@ -80,9 +86,8 @@ public class WeatherFragment extends AppFragment<WeatherPresenter> implements We
         DailyWeatherView[] viewArray = new DailyWeatherView[]{mDailyWeather1, mDailyWeather2, mDailyWeather3, mDailyWeather4};
         List<WeatherBean.ResultBean.DailyBean> list = weatherBean.getResult().getDaily();
         for (int i = 0; i < 4; i++) {
-
             WeatherBean.ResultBean.DailyBean dailyBean = list.get(i);
-            int icon = WeatherCodeCheckTable.getInstance().getWeatherIcon(dailyBean.getDay().getImg());
+            int icon = WeatherCheckTable.getInstance().getWeatherIcon(dailyBean.getDay().getImg());
             //最底温度
             String tempLow = dailyBean.getNight().getTemplow();
             //最高温度
@@ -97,6 +102,8 @@ public class WeatherFragment extends AppFragment<WeatherPresenter> implements We
     }
 
     public void setCity(SaveCityModel model) {
+        mSaveCityModel = model;
+
         mPresenter.getWeather(getActivity(), model);
 
         mTvCity.setText(model.getCity());
