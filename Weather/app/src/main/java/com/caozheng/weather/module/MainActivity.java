@@ -3,17 +3,16 @@ package com.caozheng.weather.module;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.caozheng.weather.App;
 import com.caozheng.weather.R;
 import com.caozheng.weather.adapter.MyFragmentPagerAdapter;
-import com.caozheng.weather.bean.CityBean;
+import com.caozheng.weather.db.AppRealm;
 import com.caozheng.weather.db.SaveCityModel;
 import com.caozheng.weather.module.fragment.WeatherFragment;
 import com.caozheng.weather.module.presenter.MainPresenter;
@@ -88,7 +87,7 @@ public class MainActivity extends AppActivity<MainPresenter> implements MainView
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.imv_setting:
-                startActivity(new Intent(mContext, ManageCityActivity.class));
+                startActivityForResult(new Intent(mContext, ManageCityActivity.class), 1);
                 break;
 
             default:
@@ -96,8 +95,13 @@ public class MainActivity extends AppActivity<MainPresenter> implements MainView
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void initPager(){
-        Realm mRealm = App.getRealm();
+        Realm mRealm = AppRealm.getInstance().getRealm();
         mSaveCityList = mRealm.where(SaveCityModel.class)
                 .findAllSorted("type", Sort.DESCENDING);
 
@@ -167,13 +171,6 @@ public class MainActivity extends AppActivity<MainPresenter> implements MainView
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Realm mRealm = App.getRealm();
-        if (mRealm != null) {
-            if(!mRealm.isClosed()) {
-                mRealm.close();
-            }
-
-            mRealm = null;
-        }
+        AppRealm.getInstance().closeRealm();
     }
 }

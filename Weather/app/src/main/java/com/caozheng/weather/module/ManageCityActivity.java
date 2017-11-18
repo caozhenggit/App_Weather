@@ -57,6 +57,8 @@ public class ManageCityActivity extends AppActivity<ManageCityPresenter> impleme
     private RealmResults<CityModel> mCityList;
     private RealmResults<SaveCityModel> mSaveCityList;
 
+    private boolean isChangeCity = false;
+
     @Override
     public ManageCityPresenter createPresenter() {
         return new ManageCityPresenter(this);
@@ -97,12 +99,13 @@ public class ManageCityActivity extends AppActivity<ManageCityPresenter> impleme
 
     @Override
     public void addCityDone() {
+        isChangeCity = true;
         mPresenter.selectAllSaveCity();
     }
 
     @Override
     public void deleteCityDone() {
-
+        isChangeCity = true;
     }
 
     @Override
@@ -130,6 +133,9 @@ public class ManageCityActivity extends AppActivity<ManageCityPresenter> impleme
         switch (view.getId()) {
             case R.id.imv_back:
             case R.id.tv_title:
+                if(isChangeCity){
+                    setResult(1);
+                }
                 finish();
                 break;
 

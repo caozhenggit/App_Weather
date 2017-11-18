@@ -1,9 +1,12 @@
 package com.caozheng.weather.module.presenter;
 
+import android.util.Log;
+
 import com.caozheng.weather.App;
 import com.caozheng.weather.bean.CityBean;
 import com.caozheng.weather.bean.IpBean;
 import com.caozheng.weather.bean.WeatherBean;
+import com.caozheng.weather.db.AppRealm;
 import com.caozheng.weather.db.CityModel;
 import com.caozheng.weather.db.SaveCityModel;
 import com.caozheng.weather.module.view.MainView;
@@ -38,7 +41,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     /** 同步城市列表 */
     public void syncCity(){
-        Realm mRealm = App.getRealm();
+        Realm mRealm = AppRealm.getInstance().getRealm();
         RealmResults<CityModel> cityList = mRealm.where(CityModel.class).findAll();
 
         if(cityList.size() == 0){
@@ -113,6 +116,10 @@ public class MainPresenter extends BasePresenter<MainView> {
 
                             SharedPref.getInstance(App.getAppContext())
                                     .putString(weatherBean.getResult().getCitycode(), response.body());
+                        }else {
+                            Log.i("获取当前城市天气失败", weatherBean.getMsg());
+
+                            insertDefaultCityToDb();
                         }
 
                         mView.getLocalCityDone();
@@ -128,7 +135,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     private void insertCityToDb(List<CityBean.ResultBean> list){
-        Realm mRealm = App.getRealm();
+        Realm mRealm = AppRealm.getInstance().getRealm();
 
         mRealm.beginTransaction();
 
@@ -145,7 +152,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
     
     private void insertLocalCityToDb(WeatherBean.ResultBean bean){
-        Realm mRealm = App.getRealm();
+        Realm mRealm = AppRealm.getInstance().getRealm();
 
         RealmResults<SaveCityModel> cityList = mRealm.where(SaveCityModel.class).findAll();
         for (int i = 0; i < cityList.size(); i++) {
@@ -167,5 +174,23 @@ public class MainPresenter extends BasePresenter<MainView> {
         cityModel.setType(1);
 
         mRealm.commitTransaction();
+    }
+
+    private void insertDefaultCityToDb(){
+        Realm mRealm = AppRealm.getInstance().getRealm();
+
+        RealmResults<SaveCityModel> cityList = mRealm.where(SaveCityModel.class).findAll();
+        if(cityList.size() == 0){
+            mRealm.beginTransaction();
+
+            SaveCityModel cityModel = mRealm.createObject(SaveCityModel.class);
+
+            cityModel.setCityId("1");
+            cityModel.setCity("北京");
+            cityModel.setCityCode("101010100");
+            cityModel.setType(0);
+
+            mRealm.commitTransaction();
+        }
     }
 }

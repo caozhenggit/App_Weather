@@ -25,7 +25,6 @@ import okhttp3.OkHttpClient;
 public class App extends Application {
 
     private static Context mContext;
-    private static Realm mRealm;
 
     /** 是否打印Log */
     private static final boolean LOG_DEBUG = true;
@@ -42,11 +41,6 @@ public class App extends Application {
     /** 重连次数 */
     private static final int RETRY_COUNT = 3;
 
-    /** Realm 数据库名称*/
-    private static final String DB_NAME = "weather.realm";
-    /** Realm 数据库版本号*/
-    private static final int VERSION_CODE = 0;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -54,16 +48,10 @@ public class App extends Application {
         mContext = this;
 
         initOkGo();
-
-        initRealm();
     }
 
     public static Context getAppContext(){
         return mContext;
-    }
-
-    public static Realm getRealm(){
-        return mRealm;
     }
 
     private void initOkGo(){
@@ -87,15 +75,5 @@ public class App extends Application {
                 .setCacheMode(CacheMode.FIRST_CACHE_THEN_REQUEST)
                 .setCacheTime(CacheEntity.CACHE_NEVER_EXPIRE)
                 .setRetryCount(RETRY_COUNT);
-    }
-
-    private void initRealm(){
-        Realm.init(this);
-
-        RealmConfiguration config = new RealmConfiguration.Builder()
-                .name(DB_NAME)
-                .schemaVersion(VERSION_CODE)
-                .build();
-        mRealm = Realm.getInstance(config);
     }
 }
