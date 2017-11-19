@@ -12,15 +12,17 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/blue_btn_bg_color">
+            android:gravity="center_vertical"
+            android:background="@color/app_top_color">
 
             <ImageView
                 android:id="@+id/imv_back"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
                 android:src="@mipmap/back_icon"/>
 
             <TextView
@@ -30,7 +32,7 @@
                 android:layout_toRightOf="@id/imv_back"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="17sp"
+                android:textSize="18sp"
                 android:text="管理城市"/>
 
             <ImageView
@@ -38,8 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:padding="10dp"
                 android:src="@mipmap/add_icon"/>
         </RelativeLayout>
 

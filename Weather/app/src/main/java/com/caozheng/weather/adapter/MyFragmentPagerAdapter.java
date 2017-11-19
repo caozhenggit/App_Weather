@@ -3,6 +3,8 @@ package com.caozheng.weather.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 
 import com.caozheng.weather.module.fragment.WeatherFragment;
 
@@ -14,7 +16,7 @@ import java.util.List;
  * Description:
  */
 
-public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     private FragmentManager mFragmentManager;
     private List<WeatherFragment> listFragment;
@@ -33,5 +35,10 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return listFragment.size();
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return PagerAdapter.POSITION_NONE;
     }
 }

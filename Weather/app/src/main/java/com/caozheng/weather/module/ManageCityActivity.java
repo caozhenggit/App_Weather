@@ -2,11 +2,10 @@ package com.caozheng.weather.module;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -18,12 +17,15 @@ import com.caozheng.weather.db.CityModel;
 import com.caozheng.weather.db.SaveCityModel;
 import com.caozheng.weather.module.presenter.ManageCityPresenter;
 import com.caozheng.weather.module.view.ManageCityView;
+import com.caozheng.weather.widget.SwipeListLayout;
 import com.caozheng.xfastmvp.adapter.commonlistview.CommonAdapter;
 import com.caozheng.xfastmvp.adapter.commonlistview.ViewHolder;
 import com.caozheng.xfastmvp.mvp.AppActivity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -106,6 +108,7 @@ public class ManageCityActivity extends AppActivity<ManageCityPresenter> impleme
     @Override
     public void deleteCityDone() {
         isChangeCity = true;
+        mPresenter.selectAllSaveCity();
     }
 
     @Override
@@ -113,8 +116,14 @@ public class ManageCityActivity extends AppActivity<ManageCityPresenter> impleme
         mSaveCityList = saveCityList;
         CommonAdapter<SaveCityModel> adapter = new CommonAdapter<SaveCityModel>(mContext, R.layout.item_listview_city, saveCityList) {
             @Override
-            protected void convert(ViewHolder viewHolder, SaveCityModel item, int position) {
+            protected void convert(ViewHolder viewHolder, SaveCityModel item, final int position) {
                 viewHolder.setText(R.id.tv_city_name, item.getCity());
+                viewHolder.setOnClickListener(R.id.tv_delete, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mPresenter.deleteCity(mSaveCityList.get(position).getCityId());
+                    }
+                });
             }
         };
 

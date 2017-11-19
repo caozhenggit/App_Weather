@@ -26,7 +26,8 @@
         <ImageView
             android:id="@+id/imv_setting"
             android:layout_width="wrap_content"
-            android:layout_height="25dp"
+            android:layout_height="match_parent"
+            android:padding="5dp"
             android:layout_alignParentRight="true"
             android:src="@mipmap/setting_icon"/>
     </RelativeLayout>

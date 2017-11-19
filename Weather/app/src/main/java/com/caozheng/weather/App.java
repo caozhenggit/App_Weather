@@ -30,7 +30,7 @@ public class App extends Application {
     private static final boolean LOG_DEBUG = true;
 
     /** 天气数据缓存过期时间 */
-    public static final int WEATHER_CACHE_TIMEOUT_TIME = 5 * 60 * 60 * 1000;
+    public static final int WEATHER_CACHE_TIMEOUT_TIME = 2 * 60 * 60 * 1000;
 
     /** 全局的连接超时时间 */
     private static final int CONNECT_TIMEOUT_TIME = 60000;
